@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmed — Irongate AI Solutions</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .success-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);
+            padding: 24px;
+        }
+        .success-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            padding: 48px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+        }
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            font-size: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .success-card h1 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+        .success-card p {
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .success-details {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: left;
+        }
+        .success-details .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+        .success-details .row:last-child { border-bottom: none; }
+        .success-details .label { color: #64748b; }
+        .success-details .value { font-weight: 600; color: #0f172a; }
+
+        .next-steps {
+            text-align: left;
+            margin: 24px 0;
+        }
+        .next-steps h3 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+        .next-steps ol {
+            padding-left: 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        .next-steps ol li {
+            padding: 4px 0;
+        }
+
+        .success-actions { margin-top: 24px; }
+    </style>
+</head>
+<body>
+
+<div class="success-page">
+    <div class="success-card">
+        <div class="success-icon">&#10003;</div>
+        <h1>Payment Confirmed!</h1>
+        <p>Thank you for choosing Irongate AI Solutions. Your assessment has been booked.</p>
+
+        <div class="success-details" id="paymentDetails">
+            <div class="row">
+                <span class="label">Service</span>
+                <span class="value" id="serviceName">Loading...</span>
+            </div>
+            <div class="row">
+                <span class="label">Amount</span>
+                <span class="value" id="amount">—</span>
+            </div>
+            <div class="row">
+                <span class="label">Email</span>
+                <span class="value" id="customerEmail">—</span>
+            </div>
+            <div class="row">
+                <span class="label">Status</span>
+                <span class="value" style="color:#16a34a;" id="status">Confirmed</span>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h3>What happens next:</h3>
+            <ol>
+                <li><strong>Within 1 hour</strong> — You'll receive a confirmation email with engagement details</li>
+                <li><strong>Within 24 hours</strong> — We'll reach out to schedule your 15-minute kickoff call</li>
+                <li><strong>Kickoff call</strong> — We confirm scope, collect any access needed, and begin</li>
+                <li><strong>Assessment</strong> — Testing is conducted per your service tier timeline</li>
+                <li><strong>Report delivery</strong> — Full report + debrief call when complete</li>
+            </ol>
+        </div>
+
+        <div class="success-actions">
+            <a href="/" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+    var params = new URLSearchParams(window.location.search);
+    var sessionId = params.get('session_id');
+
+    if (sessionId) {
+        try {
+            var response = await fetch('/api/payment-status/' + sessionId);
+            var data = await response.json();
+
+            if (data.service) document.getElementById('serviceName').textContent = data.service;
+            if (data.amount) document.getElementById('amount').textContent = '$' + (data.amount / 100).toFixed(2);
+            if (data.customerEmail) document.getElementById('customerEmail').textContent = data.customerEmail;
+            if (data.status === 'paid') {
+                document.getElementById('status').textContent = 'Paid';
+            }
+        } catch (err) {
+            // Fallback — just show the generic confirmation
+            document.getElementById('serviceName').textContent = 'Security Assessment';
+        }
+    }
+});
+</script>
+
+</body>
+</html>

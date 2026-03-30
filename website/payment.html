@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Security Assessment — Irongate AI Solutions</title>
+    <meta name="description" content="Choose your security assessment package and pay securely via Stripe.">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .payment-hero {
+            padding: 120px 0 40px;
+            text-align: center;
+            background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+        }
+        .payment-hero h1 { font-size: 2.2rem; margin-bottom: 12px; }
+        .payment-hero p { color: #64748b; max-width: 500px; margin: 0 auto; }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        .price-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s;
+        }
+        .price-card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+        .price-card.featured {
+            border-color: #3b82f6;
+            box-shadow: 0 10px 25px rgba(59,130,246,0.12);
+            position: relative;
+        }
+        .price-card.featured::before {
+            content: 'BEST VALUE';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #3b82f6;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 50px;
+            letter-spacing: 0.06em;
+        }
+
+        .price-card-tier {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #3b82f6;
+            margin-bottom: 8px;
+        }
+        .price-card h3 { font-size: 1.25rem; margin-bottom: 12px; color: #0f172a; }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .price-current {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .price-original {
+            font-size: 1rem;
+            color: #94a3b8;
+            text-decoration: line-through;
+        }
+        .price-period {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .price-badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #16a34a;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 50px;
+            margin-bottom: 16px;
+        }
+
+        .price-card p.desc {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .price-card ul {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        .price-card ul li {
+            padding: 5px 0 5px 24px;
+            font-size: 0.85rem;
+            position: relative;
+            color: #1e293b;
+        }
+        .price-card ul li::before {
+            content: '\2713';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .price-card .timeline {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        /* Checkout form inside card */
+        .checkout-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .checkout-fields input {
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .checkout-fields input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .btn-checkout {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+        .btn-checkout:hover { background: #2563eb; }
+        .btn-checkout:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .secure-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+        .secure-note span { color: #10b981; }
+
+        .guarantee {
+            max-width: 600px;
+            margin: 0 auto 60px;
+            text-align: center;
+            padding: 32px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            border: 1px solid #bbf7d0;
+        }
+        .guarantee h3 { color: #16a34a; margin-bottom: 8px; }
+        .guarantee p { color: #64748b; font-size: 0.9rem; }
+
+        .faq { max-width: 640px; margin: 0 auto; padding: 0 24px 80px; }
+        .faq h2 { text-align: center; margin-bottom: 32px; }
+        .faq-item { border-bottom: 1px solid #e2e8f0; padding: 20px 0; }
+        .faq-item h4 { margin-bottom: 8px; color: #0f172a; }
+        .faq-item p { color: #64748b; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+    <div class="nav-container">
+        <a href="/" class="nav-logo">
+            <span class="logo-icon">&#9711;</span> Irongate AI Solutions
+        </a>
+        <div class="nav-links">
+            <a href="/#services">Services</a>
+            <a href="/#process">Process</a>
+            <a href="/#about">About</a>
+            <a href="/#contact" class="btn btn-sm">Contact</a>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="payment-hero">
+    <h1>Choose Your Security Package</h1>
+    <p>Select a service below and pay securely via Stripe. You'll receive a confirmation email and we'll schedule your kickoff within 24 hours.</p>
+</div>
+
+<!-- Pricing Cards -->
+<div class="pricing-cards" id="pricingCards">
+
+    <!-- Card 1: Security Checkup -->
+    <div class="price-card">
+        <div class="price-card-tier">Starter</div>
+        <h3>External Security Checkup</h3>
+        <div class="price-row">
+            <span class="price-current">$79</span>
+            <span class="price-original">$399</span>
+        </div>
+        <span class="price-badge">Launch pricing — 80% off</span>
+        <p class="desc">We scan your website, email, and public-facing systems for vulnerabilities and deliver a prioritized report.</p>
+        <ul>
+            <li>Website vulnerability scan (OWASP Top 10)</li>
+            <li>SSL/TLS & security headers audit</li>
+            <li>Email security check (SPF/DKIM/DMARC)</li>
+            <li>Exposed services & port scan</li>
+            <li>Data exposure & breach check</li>
+            <li>Prioritized findings report</li>
+        </ul>
+        <div class="timeline">Delivered in 1-2 business days</div>
+        <div class="checkout-fields">
+            <input type="email" placeholder="Your email" class="checkout-email" required>
+            <input type="text" placeholder="Company name" class="checkout-company">
+        </div>
+        <button class="btn-checkout" data-service="security-checkup">Pay $79</button>
+        <div class="secure-note"><span>&#9935;</span> Secure payment via Stripe</div>
+    </div>
+
+    <!-- Card 2: Business Assessment -->
+    <div class="price-card featured">
+        <div class="price-card-tier">Most Popular</div>
+        <h3>Small Business Assessment</h3>
+        <div class="price-row">
+            <span class="price-current">$999</span>
+            <span class="price-original">$2,500</span>
+        </div>
+        <span class="price-badge">Launch pricing — 60% off</span>
+        <p class="desc">Full security review of your website, cloud workspace, email, access controls, and employee practices.</p>
+        <ul>
+            <li>Everything in Security Checkup</li>
+            <li>Cloud workspace audit (M365/Google)</li>
+            <li>Password policy & MFA review</li>
+            <li>Network perimeter assessment</li>
+            <li>Employee security evaluation</li>
+            <li>Executive summary + full report</li>
+            <li>30-min debrief call</li>
+            <li>30 days follow-up support</li>
+        </ul>
+        <div class="timeline">Delivered in 3-5 business days</div>
+        <div class="checkout-fields">
+            <input type="email" placeholder="Your email" class="checkout-email" required>
+            <input type="text" placeholder="Company name" class="checkout-company">
+        </div>
+        <button class="btn-checkout" data-service="business-assessment">Pay $999</button>
+        <div class="secure-note"><span>&#9935;</span> Secure payment via Stripe</div>
+    </div>
+
+    <!-- Card 3: Compliance Review -->
+    <div class="price-card">
+        <div class="price-card-tier">Compliance</div>
+        <h3>Security & Compliance Review</h3>
+        <div class="price-row">
+            <span class="price-current">$2,499</span>
+            <span class="price-original">$5,000</span>
+        </div>
+        <span class="price-badge">Launch pricing — 50% off</span>
+        <p class="desc">For regulated industries. Full assessment plus HIPAA, PCI-DSS, or NYDFS compliance gap analysis.</p>
+        <ul>
+            <li>Everything in Business Assessment</li>
+            <li>HIPAA / PCI / NYDFS gap analysis</li>
+            <li>Internal network assessment</li>
+            <li>Vulnerability scanning & validation</li>
+            <li>Incident response plan review</li>
+            <li>30/60/90 day remediation roadmap</li>
+            <li>Executive briefing</li>
+            <li>60 days follow-up support</li>
+        </ul>
+        <div class="timeline">Delivered in 1-2 weeks</div>
+        <div class="checkout-fields">
+            <input type="email" placeholder="Your email" class="checkout-email" required>
+            <input type="text" placeholder="Company name" class="checkout-company">
+        </div>
+        <button class="btn-checkout" data-service="compliance-review">Pay $2,499</button>
+        <div class="secure-note"><span>&#9935;</span> Secure payment via Stripe</div>
+    </div>
+
+</div>
+
+<!-- Guarantee -->
+<div class="guarantee">
+    <h3>100% Satisfaction Guarantee</h3>
+    <p>If we don't find a single security issue in your assessment, you get a full refund. In 3 years, that's never happened.</p>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+        <h4>What do I need to provide?</h4>
+        <p>For the External Security Checkup, just your website URL — we handle everything else. For the Business Assessment, we'll need temporary admin access to your cloud workspace (M365 or Google), which we'll walk you through on the kickoff call.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>Will this disrupt my business?</h4>
+        <p>No. Our testing is non-intrusive and designed to have zero impact on your operations. We never perform denial-of-service testing or anything that could take your systems offline.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>What happens after I pay?</h4>
+        <p>You'll receive a confirmation email within 1 hour. We'll schedule a 15-minute kickoff call to confirm scope, then begin testing. Your report is delivered on schedule with a debrief call to walk through everything.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>Who fixes the issues you find?</h4>
+        <p>Your report includes step-by-step remediation instructions that your IT person or provider can follow. If you don't have IT support, we can help fix issues for an additional fee, or recommend a trusted provider.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>Is my data safe?</h4>
+        <p>Absolutely. We sign a confidentiality agreement before every engagement. All findings are encrypted and shared only with you. We carry professional liability insurance and follow strict data handling protocols.</p>
+    </div>
+
+    <div class="faq-item">
+        <h4>Why is the pricing so low right now?</h4>
+        <p>We're offering launch pricing to our first clients. These rates will increase to standard pricing soon. Lock in the current rate by booking now.</p>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-bottom">
+            <p>&copy; 2026 Irongate AI Solutions. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Mobile nav
+    var toggle = document.querySelector('.nav-toggle');
+    var links = document.querySelector('.nav-links');
+    if (toggle && links) {
+        toggle.addEventListener('click', function () { links.classList.toggle('active'); });
+    }
+
+    // Checkout buttons
+    document.querySelectorAll('.btn-checkout').forEach(function (btn) {
+        btn.addEventListener('click', async function () {
+            var card = this.closest('.price-card');
+            var email = card.querySelector('.checkout-email').value.trim();
+            var company = card.querySelector('.checkout-company').value.trim();
+            var serviceId = this.dataset.service;
+
+            if (!email) {
+                card.querySelector('.checkout-email').focus();
+                card.querySelector('.checkout-email').style.borderColor = '#ef4444';
+                return;
+            }
+
+            // Disable button
+            this.disabled = true;
+            this.textContent = 'Redirecting to Stripe...';
+
+            try {
+                var response = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        serviceId: serviceId,
+                        customerEmail: email,
+                        companyName: company
+                    })
+                });
+
+                var data = await response.json();
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error(data.error || 'Something went wrong');
+                }
+            } catch (err) {
+                alert('Payment error: ' + err.message + '\n\nPlease try again or contact us directly.');
+                this.disabled = false;
+                this.textContent = this.textContent.replace('Redirecting to Stripe...', 'Try Again');
+            }
+        });
+    });
+
+    // Reset email border on focus
+    document.querySelectorAll('.checkout-email').forEach(function (input) {
+        input.addEventListener('focus', function () {
+            this.style.borderColor = '#3b82f6';
+        });
+    });
+});
+</script>
+
+</body>
+</html>
