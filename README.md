@@ -1,9 +1,9 @@
-# Sentrix
+# Boriken AI Consulting
 
 Small-business cybersecurity assessment consultancy — website, payment portal, and Stripe-powered booking backend.
 
-**Live site:** https://cruz-cybersecurity.netlify.app
-**GitHub:** https://github.com/luiscruz-cyber/sentrix (private)
+**Live site:** https://borikenaiconsulting.com
+**GitHub:** https://github.com/luiscruz-cyber/Boriken (private)
 
 ---
 
@@ -11,18 +11,18 @@ Small-business cybersecurity assessment consultancy — website, payment portal,
 
 | | |
 |---|---|
-| **Public brand** | Sentrix |
-| **Legal entity** | Boriken AI Solutions LLC (NJ) |
-| **Relationship** | DBA — "Boriken AI Solutions LLC d/b/a Sentrix" |
-| **Registration (pending)** | NJ Form C-150G "Registration of Alternate Name" |
-| **Billing / Stripe / banking** | Boriken AI Solutions LLC |
-| **Customer-facing branding** | Sentrix (website, contracts, marketing) |
+| **Public brand** | Boriken AI Consulting |
+| **Legal entity** | Boriken AI Consulting LLC (NJ) |
+| **Relationship** | Brand matches legal entity — no DBA / alternate name filing needed |
+| **Billing / Stripe / banking** | Boriken AI Consulting LLC |
+| **Customer-facing branding** | Boriken AI Consulting (website, contracts, marketing) |
 | **Target market** | Small businesses, NY/NJ tri-state area |
 
 ### Naming History
 1. **Cruz Cybersecurity** — original working name
-2. **Irongate AI Solutions** — placeholder rename (2026-03-29)
-3. **Sentrix** — current public brand (2026-04-18)
+2. **Irongate AI Solutions** — placeholder rename (2026-03-29), abandoned (name already in use)
+3. **Sentrix** — public brand (2026-04-18), abandoned (name already in use)
+4. **Boriken AI Consulting** — current public brand (2026-04-23), matches legal entity
 
 ---
 
@@ -53,7 +53,7 @@ Service definitions live in `server.js` (`SERVICES` object) as the single source
 ## Repository Structure
 
 ```
-~/cruz-cybersecurity/           (directory name is legacy — not renamed to sentrix yet)
+~/Boriken/
 ├── README.md                   # This file
 ├── BUSINESS-PLAN.md            # Service tiers, markets, revenue projections
 ├── TODO.md                     # Master task tracker
@@ -110,7 +110,7 @@ Service definitions live in `server.js` (`SERVICES` object) as the single source
 
 ### Frontend (Netlify) — currently automated
 ```bash
-cd ~/cruz-cybersecurity
+cd ~/Boriken
 node deploy.js
 ```
 - Reads everything in `website/`, SHA-1 hashes each file, POSTs manifest to Netlify API, uploads only changed files.
@@ -155,15 +155,15 @@ PORT=3000                           # optional, defaults to 3000
 - Backend API (Express + Stripe) working locally
 - Website deployed to Netlify
 - Rebranded Irongate → Sentrix across website files (2026-04-18)
+- Rebranded Sentrix → Boriken AI Consulting across entire repo (2026-04-23)
 - Pushed to private GitHub repo
 
 ### 🟡 In Progress / Pending
-1. **NJ Alternate Name filing** — File Form C-150G (~$50) so contracts can read "Boriken AI Solutions LLC d/b/a Sentrix"
-2. **Stripe account** — Create under Boriken AI Solutions LLC. Set statement descriptor to "SENTRIX" so it shows on customer card statements. Paste API keys into `.env`.
-3. **Backend deployment** — Deploy `server.js` to Render.com so payments work in production, not just local.
-4. **Frontend → Backend wiring** — Update frontend API URLs to point at production backend.
-5. **Rebrand remaining files** — `server.js` (line 141 log message), `BUSINESS-PLAN.md`, `TODO.md`, `contracts/`, `templates/`, `checklists/` still contain "Irongate AI Solutions".
-6. **Directory rename** — `~/cruz-cybersecurity/` → `~/sentrix/` (cosmetic, optional).
+1. **Stripe account** — Create under Boriken AI Consulting LLC. Set statement descriptor to "BORIKEN" so it shows on customer card statements. Paste API keys into `.env`.
+2. **Backend deployment** — Deploy `server.js` to Render.com so payments work in production, not just local.
+3. **Frontend → Backend wiring** — Update frontend API URLs to point at production backend.
+4. **Point borikenaiconsulting.com at Netlify** — add custom domain in Netlify, update DNS at Zoho.
+5. **Rename GitHub repo** — `Sentrix` → `Boriken` on GitHub, then update local remote URL.
 
 ---
 
@@ -180,7 +180,7 @@ PORT=3000                           # optional, defaults to 3000
 
 ```bash
 # Deploy website
-cd ~/cruz-cybersecurity && node deploy.js
+cd ~/Boriken && node deploy.js
 
 # Run backend locally
 npm start

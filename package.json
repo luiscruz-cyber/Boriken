@@ -1,7 +1,7 @@
 {
-  "name": "cruz-cybersecurity",
+  "name": "boriken-ai-consulting",
   "version": "1.0.0",
-  "description": "",
+  "description": "Boriken AI Consulting — small-business cybersecurity assessment website, payment portal, and Stripe-powered booking backend.",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",

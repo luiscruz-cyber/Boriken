@@ -1,13 +1,13 @@
 # Security Assessment Report
 
-![Irongate AI Solutions](logo-placeholder)
+![Boriken AI Consulting](logo-placeholder)
 
 ---
 
 | Field | Value |
 |-------|-------|
 | **Client** | [Client Name] |
-| **Prepared by** | [Your Name], Irongate AI Solutions |
+| **Prepared by** | [Your Name], Boriken AI Consulting |
 | **Assessment Date** | [Start] — [End] |
 | **Report Date** | [Date] |
 | **Report Version** | 1.0 |
@@ -19,7 +19,7 @@
 
 ### For Leadership (Non-Technical)
 
-[Client Name] engaged Irongate AI Solutions to perform a [Tier Name] of their digital infrastructure. The assessment was conducted between [dates] and evaluated [scope summary].
+[Client Name] engaged Boriken AI Consulting to perform a [Tier Name] of their digital infrastructure. The assessment was conducted between [dates] and evaluated [scope summary].
 
 ### Overall Security Grade: [A/B/C/D/F]
 
@@ -165,7 +165,7 @@ It's important to acknowledge security controls that are already in place:
 
 ---
 
-*This report is confidential and intended solely for [Client Name]. Do not distribute without written permission from Irongate AI Solutions.*
+*This report is confidential and intended solely for [Client Name]. Do not distribute without written permission from Boriken AI Consulting.*
 
-**Irongate AI Solutions**
+**Boriken AI Consulting**
 [Your Name] | [Email] | [Phone]

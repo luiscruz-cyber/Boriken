@@ -138,6 +138,6 @@ app.get('/payment', (req, res) => res.sendFile(path.join(__dirname, 'website', '
 app.get('/success', (req, res) => res.sendFile(path.join(__dirname, 'website', 'payment-success.html')));
 
 app.listen(PORT, () => {
-    console.log(`Irongate AI Solutions server running at ${DOMAIN}`);
+    console.log(`Boriken AI Consulting server running at ${DOMAIN}`);
     console.log(`Payment portal: ${DOMAIN}/payment.html`);
 });

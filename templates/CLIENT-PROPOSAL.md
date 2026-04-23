@@ -3,15 +3,15 @@
 ---
 
 **Prepared for:** [Client Name]
-**Prepared by:** [Your Name], Irongate AI Solutions
+**Prepared by:** [Your Name], Boriken AI Consulting
 **Date:** [Date]
-**Proposal #:** IG-2026-[XXX]
+**Proposal #:** BAC-2026-[XXX]
 
 ---
 
 ## Executive Summary
 
-[Client Name] has engaged Irongate AI Solutions to provide a security assessment of your organization's digital infrastructure. This proposal outlines the scope, methodology, timeline, and investment for the engagement.
+[Client Name] has engaged Boriken AI Consulting to provide a security assessment of your organization's digital infrastructure. This proposal outlines the scope, methodology, timeline, and investment for the engagement.
 
 As a [industry] business handling [type of sensitive data], you face [specific regulatory requirement or threat]. Our assessment will identify vulnerabilities before attackers do and provide a clear remediation roadmap.
 
@@ -93,9 +93,9 @@ Our assessment follows industry-standard frameworks:
 
 ---
 
-## About Irongate AI Solutions
+## About Boriken AI Consulting
 
-Irongate AI Solutions provides affordable, professional security assessments to small and mid-size businesses in the NY/NJ tri-state area. With backgrounds in cybersecurity analysis and network engineering, we bring enterprise-grade security expertise at small business prices.
+Boriken AI Consulting provides affordable, professional security assessments to small and mid-size businesses in the NY/NJ tri-state area. With backgrounds in cybersecurity analysis and network engineering, we bring enterprise-grade security expertise at small business prices.
 
 **Certifications:** [List relevant certs]
 **Insurance:** Professional liability (E&O) and general liability insured
@@ -104,7 +104,7 @@ Irongate AI Solutions provides affordable, professional security assessments to 
 
 ## Authorization & Agreement
 
-By signing below, [Client Name] authorizes Irongate AI Solutions to perform the security assessment described in this proposal against the systems listed in the scope.
+By signing below, [Client Name] authorizes Boriken AI Consulting to perform the security assessment described in this proposal against the systems listed in the scope.
 
 **Client Representative:**
 
@@ -113,7 +113,7 @@ Title: _________________________
 Signature: _____________________
 Date: _________________________
 
-**Irongate AI Solutions:**
+**Boriken AI Consulting:**
 
 Name: _________________________
 Signature: _____________________

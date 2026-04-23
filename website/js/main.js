@@ -1,4 +1,4 @@
-// Cruz Cybersecurity — Main JS
+// Boriken AI Consulting — Main JS
 
 // Mobile nav toggle
 document.addEventListener('DOMContentLoaded', function () {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             // TODO: Replace with your actual email
-            window.location.href = 'mailto:contact@cruzcybersecurity.com?subject=' + subject + '&body=' + body;
+            window.location.href = 'mailto:contact@borikenaiconsulting.com?subject=' + subject + '&body=' + body;
 
             // Show confirmation
             form.innerHTML = '<div style="text-align:center;padding:40px 0;">' +

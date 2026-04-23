@@ -1,5 +1,5 @@
 # Small Business Security Assessment Checklist
-## Irongate AI Solutions — Master Checklist
+## Boriken AI Consulting — Master Checklist
 
 **Client:** _______________
 **Date:** _______________

@@ -1,5 +1,5 @@
-# Irongate AI Solutions — TODO
-**Last updated:** 2026-03-29
+# Boriken AI Consulting — TODO
+**Last updated:** 2026-04-23
 
 ---
 
@@ -11,7 +11,7 @@
 - [ ] Complete business verification (name, address, bank account for payouts)
 - [ ] Go to Developers > API Keys
 - [ ] Copy test keys (sk_test_... and pk_test_...)
-- [ ] Paste into `~/cruz-cybersecurity/.env`:
+- [ ] Paste into `~/Boriken/.env`:
   ```
   STRIPE_SECRET_KEY=sk_test_YOUR_KEY
   STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_KEY
@@ -28,7 +28,7 @@
 
 ### 3. Redeploy Website
 - [ ] Redeploy with new name & pricing (`node deploy.js`)
-- [ ] Verify live site shows "Irongate AI Solutions"
+- [ ] Verify live site shows "Boriken AI Consulting"
 
 ### 4. Update Remaining Pricing (if desired)
 - Tier 1 (External Security Checkup): **$79 launch / $399 normal** (DONE)
@@ -46,10 +46,12 @@
 - [x] Assessment report template created
 - [x] Service agreement / contract created
 - [x] 12-category assessment checklist created
-- [x] Website deployed to Netlify: https://cruz-cybersecurity.netlify.app
+- [x] Website deployed to Netlify: https://borikenaiconsulting.com
 - [x] Node.js + Express backend with Stripe Checkout
 - [x] Pentest project started (Ama Earth Group — for portfolio)
-- [x] Renamed to "Irongate AI Solutions" across all files (2026-03-29)
+- [x] Renamed to "Irongate AI Solutions" across all files (2026-03-29) — later abandoned (name taken)
+- [x] Rebranded to "Sentrix" across website files (2026-04-18) — later abandoned (name taken)
+- [x] Rebranded to "Boriken AI Consulting" across entire repo (2026-04-23) — matches LLC name
 - [x] Updated Tier 1 pricing to $79 launch / $399 normal (2026-03-29)
 
 ---
@@ -57,7 +59,7 @@
 ## Project Files Map
 
 ```
-~/cruz-cybersecurity/
+~/Boriken/
 ├── server.js                  # Backend — Stripe payments + static file server
 ├── deploy.js                  # Deploys website/ folder to Netlify
 ├── package.json               # npm start / npm run dev
@@ -82,18 +84,18 @@
 ```
 
 ## Live URLs
-- **Website:** https://cruz-cybersecurity.netlify.app
-- **Payment:** https://cruz-cybersecurity.netlify.app/payment.html
+- **Website:** https://borikenaiconsulting.com
+- **Payment:** https://borikenaiconsulting.com/payment.html
 
 ## How to Run Locally
 ```bash
-cd ~/cruz-cybersecurity
+cd ~/Boriken
 npm start
 # Open http://localhost:3000
 ```
 
 ## How to Redeploy Website
 ```bash
-cd ~/cruz-cybersecurity
+cd ~/Boriken
 node deploy.js
 ```

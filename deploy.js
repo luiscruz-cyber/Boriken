@@ -92,7 +92,7 @@ async function main() {
     }
 
     console.log('\nDeploy complete!');
-    console.log('Live URL: https://cruz-cybersecurity.netlify.app');
+    console.log('Live URL: https://borikenaiconsulting.com');
 }
 
 main().catch(function(err) { console.error('Error:', err); });

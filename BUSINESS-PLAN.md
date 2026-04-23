@@ -1,4 +1,4 @@
-# Irongate AI Solutions — Business Plan
+# Boriken AI Consulting — Business Plan
 **Founded:** 2026
 **Location:** NY/NJ Tri-State Area (Remote-First)
 **Owner:** [Your Name]
