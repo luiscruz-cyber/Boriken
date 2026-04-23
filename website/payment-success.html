@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (sessionId) {
         try {
-            var response = await fetch('/api/payment-status/' + sessionId);
+            var response = await fetch('/api/payment-status?session_id=' + encodeURIComponent(sessionId));
             var data = await response.json();
 
             if (data.service) document.getElementById('serviceName').textContent = data.service;

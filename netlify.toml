@@ -13,8 +13,13 @@
   status = 200
 
 [[redirects]]
-  from = "/api/payment-status/:sessionId"
-  to = "/.netlify/functions/payment-status?session_id=:sessionId"
+  from = "/api/payment-status/*"
+  to = "/.netlify/functions/payment-status?session_id=:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/payment-status"
+  to = "/.netlify/functions/payment-status"
   status = 200
 
 [[redirects]]
