@@ -1,6 +1,6 @@
 # Boriken AI Consulting
 
-Small-business cybersecurity assessment consultancy — website, payment portal, and Stripe-powered booking backend.
+Small-business cybersecurity consultancy — public site, payment portal, and Stripe checkout backend.
 
 **Live site:** https://borikenaiconsulting.com
 **GitHub:** https://github.com/luiscruz-cyber/Boriken (private)
@@ -35,18 +35,18 @@ Small-business cybersecurity assessment consultancy — website, payment portal,
 | 3 | Security & Compliance Review | $2,499 | $5,000 | 1–2 weeks |
 | – | Monthly Security Retainer | $750/mo | $750/mo | Ongoing |
 
-Service definitions live in `server.js` (`SERVICES` object) as the single source of truth. Update pricing there and redeploy.
+Service definitions live in `netlify/functions/_shared/services.js` as the single source of truth — update there and push to redeploy.
 
 ---
 
 ## Tech Stack
 
-- **Frontend:** Static HTML / CSS / vanilla JS (no framework)
-- **Backend:** Node.js + Express (`server.js`)
-- **Payments:** Stripe Checkout (hosted checkout, not custom-built card form)
-- **Hosting (frontend):** Netlify
-- **Hosting (backend):** Not yet deployed — planned: Render.com
-- **Deploy automation:** Custom Node script (`deploy.js`) using Netlify API directly
+- **Frontend:** Static HTML / CSS / vanilla JS, hosted on Netlify
+- **Backend:** Netlify Functions (serverless Node 20) — checkout, payment status, Stripe webhook
+- **Payments:** Stripe Checkout (hosted) + signature-verified webhooks (live mode)
+- **DNS:** OpenSRS (via Zoho registrar) — `borikenaiconsulting.com`
+- **Email:** ImprovMX forwarder — `contact@borikenaiconsulting.com` → owner's Gmail
+- **CI/CD:** GitHub Actions deploy on push to `main` via Netlify CLI
 
 ---
 
@@ -54,149 +54,155 @@ Service definitions live in `server.js` (`SERVICES` object) as the single source
 
 ```
 ~/Boriken/
-├── README.md                   # This file
-├── BUSINESS-PLAN.md            # Service tiers, markets, revenue projections
-├── TODO.md                     # Master task tracker
-├── server.js                   # Express + Stripe Checkout backend
-├── deploy.js                   # Deploys website/ to Netlify via API
-├── package.json                # npm scripts: start / dev
-├── .env                        # Stripe API keys (gitignored, placeholder values)
-├── .gitignore
-├── website/                    # Static site deployed to Netlify
-│   ├── index.html              # Homepage (hero, services, process, about, contact)
-│   ├── payment.html            # Payment portal (3 tiers + Stripe checkout)
-│   ├── payment-success.html    # Post-payment confirmation page
+├── README.md
+├── BUSINESS-PLAN.md
+├── TODO.md
+├── package.json
+├── netlify.toml                       # /api/* → functions
+├── .github/workflows/deploy.yml       # Auto-deploy on push to main
+├── netlify/functions/
+│   ├── config.js                      # GET /api/config
+│   ├── checkout.js                    # POST /api/checkout
+│   ├── payment-status.js              # GET /api/payment-status?session_id=...
+│   ├── webhook.js                     # POST /api/webhook
+│   └── _shared/
+│       ├── services.js                # Service catalog (SSOT)
+│       └── stripe.js                  # Pure-Node Stripe HTTP helper
+├── server.js                          # Legacy local-dev Express server
+├── deploy.js                          # Legacy manual deploy script (slated for removal — see scheduled cleanup 2026-05-07)
+├── website/
+│   ├── index.html                     # Homepage
+│   ├── payment.html                   # 3-tier checkout page
+│   ├── payment-success.html           # Post-payment confirmation
+│   ├── privacy.html                   # Privacy Policy
+│   ├── terms.html                     # Terms of Service
 │   ├── css/style.css
-│   ├── js/main.js              # Mobile nav, form handler, scroll
+│   ├── js/main.js
 │   └── images/
 ├── templates/
-│   ├── CLIENT-PROPOSAL.md      # Send to prospects
-│   └── ASSESSMENT-REPORT.md    # Deliver to clients after assessment
+│   ├── CLIENT-PROPOSAL.md
+│   └── ASSESSMENT-REPORT.md
 ├── checklists/
-│   └── small-business-assessment.md    # 100+ item assessment checklist
+│   └── small-business-assessment.md
 └── contracts/
-    └── SERVICE-AGREEMENT.md    # Master service agreement
+    └── SERVICE-AGREEMENT.md
 ```
 
 ---
 
-## Backend Architecture (`server.js`)
+## Backend Architecture
 
-### Endpoints
+Functions live in `netlify/functions/`. `netlify.toml` rewrites `/api/*` to `/.netlify/functions/*`.
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| `GET`  | `/api/config` | Returns services catalog + Stripe publishable key for frontend |
-| `POST` | `/api/checkout` | Creates a Stripe Checkout Session, returns redirect URL |
-| `GET`  | `/api/payment-status/:sessionId` | Verifies payment status (used by success page) |
-| `POST` | `/api/webhook` | Stripe webhook receiver (currently only logs `checkout.session.completed`) |
-| `GET`  | `/payment`, `/success` | Serves static HTML pages |
+| Method | Path | Function | Purpose |
+|--------|------|----------|---------|
+| `GET`  | `/api/config` | `config.js` | Returns service catalog + Stripe publishable key |
+| `POST` | `/api/checkout` | `checkout.js` | Creates a Stripe Checkout Session, returns redirect URL |
+| `GET`  | `/api/payment-status?session_id=...` | `payment-status.js` | Returns paid/unpaid + service + amount for the success page |
+| `POST` | `/api/webhook` | `webhook.js` | Receives Stripe events; verifies signature with `STRIPE_WEBHOOK_SECRET` |
+
+Functions use Node stdlib only (no `stripe` npm dep). Stripe API calls go through a small `https`-based helper in `_shared/stripe.js`.
 
 ### Payment flow
-1. Customer visits `/payment.html`, picks a tier, enters email + company name.
-2. Frontend calls `POST /api/checkout` → backend creates Stripe session → returns Stripe-hosted checkout URL.
-3. Customer pays on Stripe's domain (PCI scope stays with Stripe, not us).
+1. Customer hits `/payment.html`, picks a tier, enters email + company name
+2. Frontend calls `POST /api/checkout` → backend creates Stripe session → returns hosted Stripe URL
+3. Customer pays on Stripe's domain (PCI scope stays with Stripe)
 4. Stripe redirects to `/payment-success.html?session_id=...`
-5. Success page calls `GET /api/payment-status/:sessionId` to confirm and display details.
-6. Stripe also POSTs to `/api/webhook` — currently just logs; TODO: trigger confirmation email + project tracking.
+5. Success page calls `GET /api/payment-status?session_id=...` to confirm and display details
+6. Stripe also POSTs to `/api/webhook` — currently just logs; TODO: trigger confirmation email + project tracking
 
 ### Recurring vs one-time
-- `monthly-retainer` uses `mode: 'subscription'` with `recurring: { interval: 'month' }`
-- All other tiers use `mode: 'payment'` (one-time)
+- `monthly-retainer` → `mode: 'subscription'` with `recurring: { interval: 'month' }`
+- All other tiers → `mode: 'payment'` (one-time)
 
 ---
 
 ## Deployment
 
-### Frontend (Netlify) — currently automated
-```bash
-cd ~/Boriken
-node deploy.js
-```
-- Reads everything in `website/`, SHA-1 hashes each file, POSTs manifest to Netlify API, uploads only changed files.
-- Netlify site ID: `12834436-f4e9-4db0-8ac0-bb0207f1f160`
-- Netlify API token is currently **hardcoded in `deploy.js`** — should be moved to `.env` (`NETLIFY_TOKEN`). See "Known Issues" below.
+### Continuous deployment (GitHub Actions)
+Every push to `main` triggers `.github/workflows/deploy.yml`, which runs `netlify deploy --prod` to push `website/` and `netlify/functions/` to the Netlify site.
 
-### Backend (not yet deployed)
-Local dev only:
+Repo secrets used by the workflow:
+- `NETLIFY_AUTH_TOKEN` — Netlify personal access token
+- `NETLIFY_SITE_ID` — `12834436-f4e9-4db0-8ac0-bb0207f1f160`
+
+> **Why GHA instead of Netlify's native git integration:** Netlify's free tier blocks builds from "unrecognized contributors" on private repos. Connecting the GitHub identity didn't unblock it (Google-login Netlify accounts don't satisfy the check). API-based deploys via GHA bypass that gate entirely.
+
+### Local development
 ```bash
-npm start           # production mode
-npm run dev         # watch mode (auto-restart on changes)
-# then visit http://localhost:3000/payment.html
+npm start           # runs server.js (Express) on localhost:3000
+npm run dev         # watch mode
 ```
 
-Production plan:
-1. Deploy `server.js` to Render.com (free tier) or Railway.
-2. Set env vars on the host: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `DOMAIN` (production URL).
-3. Update frontend `fetch` calls in `website/js/main.js` or `payment.html` to point at the Render URL for `/api/*`.
-4. Configure Stripe webhook endpoint: `https://<render-url>/api/webhook`.
+The Express server in `server.js` is for local testing without deploying. Production traffic flows through Netlify Functions, not Express.
 
 ---
 
-## Environment Variables (`.env`)
+## Environment
 
+### Local `.env` (gitignored)
 ```
-STRIPE_SECRET_KEY=sk_test_...       # or sk_live_ when going to production
+STRIPE_SECRET_KEY=sk_test_...
 STRIPE_PUBLISHABLE_KEY=pk_test_...
-DOMAIN=http://localhost:3000        # set to production URL when deployed
-PORT=3000                           # optional, defaults to 3000
+STRIPE_WEBHOOK_SECRET=whsec_...
+DOMAIN=http://localhost:3000
+PORT=3000
 ```
 
-`.env` is gitignored. Do NOT commit real keys.
+### Netlify env vars (production)
+- `STRIPE_SECRET_KEY` — `sk_live_...`
+- `STRIPE_PUBLISHABLE_KEY` — `pk_live_...`
+- `STRIPE_WEBHOOK_SECRET` — live webhook signing secret `whsec_...`
+
+Manage via the Netlify UI or `netlify env:set <KEY> <VALUE>`.
 
 ---
 
-## Current Status
+## Status
 
-### ✅ Done
-- Business plan written
-- Website designed + built (homepage, payment, success pages)
-- Payment portal with 3 tiers + Stripe Checkout integration
-- Backend API (Express + Stripe) working locally
-- Website deployed to Netlify
-- Rebranded Irongate → Sentrix across website files (2026-04-18)
-- Rebranded Sentrix → Boriken AI Consulting across entire repo (2026-04-23)
-- Pushed to private GitHub repo
+### Done
+- Live site, custom domain, automatic SSL
+- Stripe **live mode** end-to-end (checkout, success page, webhook with signature verification)
+- Email forwarding for `contact@borikenaiconsulting.com` → owner Gmail
+- Privacy Policy + Terms of Service pages (template — pending lawyer review)
+- Featured client engagement (Ama Earth Group)
+- Continuous deployment via GHA
 
-### 🟡 In Progress / Pending
-1. **Stripe account** — Create under Boriken AI Consulting LLC. Set statement descriptor to "BORIKEN" so it shows on customer card statements. Paste API keys into `.env`.
-2. **Backend deployment** — Deploy `server.js` to Render.com so payments work in production, not just local.
-3. **Frontend → Backend wiring** — Update frontend API URLs to point at production backend.
-4. **Point borikenaiconsulting.com at Netlify** — add custom domain in Netlify, update DNS at Zoho.
-5. **Rename GitHub repo** — `Sentrix` → `Boriken` on GitHub, then update local remote URL.
+### Open items
+1. **Replace contact form's `mailto:`** with a real submission endpoint (Netlify Function → email)
+2. **Mercury business bank account** — application in review; once approved, swap Stripe payouts from personal to business account
+3. **Virtual mailbox** for public-facing business address (replace the home address currently in `privacy.html`/`terms.html`)
+4. **Lawyer review** of `privacy.html` + `terms.html` for NJ jurisdiction
+5. **Favicon, SEO meta tags, Open Graph tags** — site polish
+6. **Confirmation email on `checkout.session.completed`** — webhook currently just logs
+7. **Rate limiting** on `/api/checkout` — low priority pre-traffic
 
----
-
-## Known Issues / Security Notes
-
-- **Netlify API token is hardcoded in `deploy.js`** (line 6). Since this repo is private, the blast radius is limited, but the token should be moved to `.env` as `NETLIFY_TOKEN` and loaded via `process.env`. If the repo is ever made public, this token must be rotated first.
-- **Backend runs Stripe in test mode only** — switch to live keys only after backend is deployed and webhook is configured.
-- **No rate limiting on `/api/checkout`** — low priority until traffic exists, but worth adding before going live.
-- **No email notifications yet** — the webhook handler logs payments but doesn't email the customer or notify the business. TODO in `server.js:127`.
+### Known issues
+- **Netlify API token hardcoded in `deploy.js:6`** — scheduled for removal/rotation 2026-05-07 (the file is dead code now that GHA handles deploys)
 
 ---
 
 ## Useful Commands
 
 ```bash
-# Deploy website
-cd ~/Boriken && node deploy.js
+# Deploy: any push to main triggers GHA
+git push origin main
 
-# Run backend locally
+# Run local dev server (uses .env)
 npm start
 
-# Watch mode
-npm run dev
+# Test Stripe locally with test card 4242 4242 4242 4242 (any future expiry, any CVC)
 
-# Test Stripe locally
-# Use test card: 4242 4242 4242 4242, any future expiry, any CVC
+# Tail production function logs
+netlify logs:functions --site boriken-ai-consulting
 
-# Push to GitHub
-git push origin main
+# View / set Netlify env vars
+netlify env:list  --site boriken-ai-consulting
+netlify env:set <KEY> <VALUE> --site boriken-ai-consulting
 ```
 
 ---
 
 ## Related Projects
 
-- **Ama Earth Group pentest engagement** (authorized) — `~/pentest-ama-earth-group/` — building portfolio case studies while the consultancy launches.
+- **Ama Earth Group** — current client engagement (SOC 2 compliance preparation + ongoing security review). Working repo: `~/pentest-ama-earth-group/`.
