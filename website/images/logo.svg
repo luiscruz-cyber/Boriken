@@ -6,15 +6,13 @@
     </g>
   </defs>
 
-  <!-- 8 petals around the center -->
+  <!-- 6 petals around the center -->
   <use href="#petal" transform="rotate(0 50 50)"/>
-  <use href="#petal" transform="rotate(45 50 50)"/>
-  <use href="#petal" transform="rotate(90 50 50)"/>
-  <use href="#petal" transform="rotate(135 50 50)"/>
+  <use href="#petal" transform="rotate(60 50 50)"/>
+  <use href="#petal" transform="rotate(120 50 50)"/>
   <use href="#petal" transform="rotate(180 50 50)"/>
-  <use href="#petal" transform="rotate(225 50 50)"/>
-  <use href="#petal" transform="rotate(270 50 50)"/>
-  <use href="#petal" transform="rotate(315 50 50)"/>
+  <use href="#petal" transform="rotate(240 50 50)"/>
+  <use href="#petal" transform="rotate(300 50 50)"/>
 
   <!-- Central disc -->
   <circle cx="50" cy="50" r="22" fill="#0f172a"/>
